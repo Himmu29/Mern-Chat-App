@@ -29,13 +29,11 @@ app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
-    const frontendBuildPath = path.resolve(__dirname, "../frontend/dist");
+    const frontendBuildPath = path.resolve("../frontend/dist"); // relative to project root
 
-    // Serve static files
     app.use(express.static(frontendBuildPath));
 
-    // Serve index.html for React routes
-    app.get(/(.*)/, (req, res) => {
+    app.get("*", (req, res) => {
         res.sendFile(path.join(frontendBuildPath, "index.html"));
     });
 }
