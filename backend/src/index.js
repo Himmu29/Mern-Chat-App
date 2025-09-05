@@ -28,12 +28,16 @@ app.use(cors({
 app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 
-if(process.env.NODE_ENV === "production"){
-    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+if (process.env.NODE_ENV === "production") {
+    const frontendBuildPath = path.resolve(__dirname, "../frontend/dist");
 
-    app.get(/(.*)/,(req,res) =>{
-        res.sendFile(path.join(__dirname,"../frontend","dist","index.html"));
-    })
+    // Serve static files
+    app.use(express.static(frontendBuildPath));
+
+    // Serve index.html for React routes
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(frontendBuildPath, "index.html"));
+    });
 }
 
 server.listen(PORT,()=>{
